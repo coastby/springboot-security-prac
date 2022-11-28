@@ -3,6 +3,8 @@ package com.example.securityprac.service;
 import com.example.securityprac.domain.User;
 import com.example.securityprac.dto.UserDto;
 import com.example.securityprac.dto.UserJoinRequest;
+import com.example.securityprac.exception.ErrorCode;
+import com.example.securityprac.exception.HospitalReviewAppException;
 import com.example.securityprac.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,7 +18,9 @@ public class UserService {
     public UserDto join (UserJoinRequest request){
         //userName이 중복되면 예외 발생
         userRepository.findByUserName(request.getUserName())
-                .ifPresent(user -> new RuntimeException("이미 존재하는 아이디입니다."));
+                .ifPresent(user -> {
+                    throw new HospitalReviewAppException(ErrorCode.DUPLICATED_USER_NAME, String.format("%s는 이미 존재하는 아이디입니다.", request.getUserName()));
+                });
         User savedUser = userRepository.save(request.toEntity());
         return UserDto.builder()
                 .id(savedUser.getId())
