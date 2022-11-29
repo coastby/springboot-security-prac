@@ -12,7 +12,7 @@ public class UserJoinRequest {
     private String userName;
     private String password;
     private String email;
-    public User toEntity(String password){
+    public User toEntity(String password){  //비밀번호 암호화해서 매개변수로 넣어서 엔티티 생성
         return User.builder()
                 .userName(this.userName)
                 .password(password)

@@ -14,18 +14,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserRestController.class)
+@WithMockUser
 class UserRestControllerTest {
     @MockBean
     UserService userService;
@@ -48,6 +51,7 @@ class UserRestControllerTest {
 
         mockMvc.perform(
                 post("/api/v1/users")
+                        .with(csrf())
                         .content(objectMapper.writeValueAsBytes(userJoinRequest))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -68,6 +72,7 @@ class UserRestControllerTest {
 
         mockMvc.perform(
                 post("/api/v1/users")
+                        .with(csrf())
                         .content(objectMapper.writeValueAsBytes(userJoinRequest))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isConflict())

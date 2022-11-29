@@ -23,7 +23,7 @@ public class UserService {
                 .ifPresent(user -> {
                     throw new HospitalReviewAppException(ErrorCode.DUPLICATED_USER_NAME, String.format("%s는 이미 존재하는 아이디입니다.", request.getUserName()));
                 });
-        User savedUser = userRepository.save(request.toEntity(encoder.encode(request.getPassword())));
+        User savedUser = userRepository.save(request.toEntity(encoder.encode(request.getPassword())));  //request의 비밀번호를 인코딩하여 매개변수로 넘겨준다
         return UserDto.builder()
                 .id(savedUser.getId())
                 .userName(savedUser.getUserName())
