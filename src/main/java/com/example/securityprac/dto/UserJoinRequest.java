@@ -12,10 +12,10 @@ public class UserJoinRequest {
     private String userName;
     private String password;
     private String email;
-    public User toEntity(){
+    public User toEntity(String password){
         return User.builder()
                 .userName(this.userName)
-                .password(this.password)
+                .password(password)
                 .email(this.email)
                 .build();
     }
