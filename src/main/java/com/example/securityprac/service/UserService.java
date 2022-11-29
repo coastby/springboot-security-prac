@@ -6,7 +6,9 @@ import com.example.securityprac.dto.UserJoinRequest;
 import com.example.securityprac.exception.ErrorCode;
 import com.example.securityprac.exception.HospitalReviewAppException;
 import com.example.securityprac.repository.UserRepository;
+import com.example.securityprac.utils.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,9 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder encoder;    //비밀번호 인코더
+    @Value("${jwt.token.secret}")
+    private String secretKey;
+    private long expiredTimeMs = 1000*60*60;    //1시간
 
     //비지니스 로직 - 회원 가입
     public UserDto join (UserJoinRequest request){
@@ -40,7 +45,7 @@ public class UserService {
             throw new HospitalReviewAppException(ErrorCode.INVALID_PASSWORD, String.format(("비밀번호가 틀렸습니다.")));
         }
         //토큰 생성
-
-        return "";
+        String token = JwtTokenUtil.generateToken(user.getUserName(), secretKey, expiredTimeMs);
+        return token;
     }
 }
