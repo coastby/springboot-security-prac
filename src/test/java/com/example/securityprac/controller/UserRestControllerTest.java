@@ -36,16 +36,15 @@ class UserRestControllerTest {
     ObjectMapper objectMapper;
     @Autowired
     private MockMvc mockMvc;
+    UserJoinRequest userJoinRequest = UserJoinRequest.builder()
+            .userName("hoon")
+            .password("password")
+            .email("jo@email.com")
+            .build();
 
     @Test
     @DisplayName("회원가입")
     void join() throws Exception {
-        UserJoinRequest userJoinRequest = UserJoinRequest.builder()
-                .userName("hoon")
-                .password("password")
-                .email("jo@email.com")
-                .build();
-
         given(userService.join(any())).willReturn(UserDto.builder().userName("hoon").email("jo@email.com").build());
 //        when(userService.join(any())).thenReturn(mock(UserDto.class));
 
@@ -62,12 +61,6 @@ class UserRestControllerTest {
     @Test
     @DisplayName("중복 아이디 예외 발생")
     void joinFail() throws Exception {
-        UserJoinRequest userJoinRequest = UserJoinRequest.builder()
-                .userName("hoon")
-                .password("password")
-                .email("jo@email.com")
-                .build();
-
         given(userService.join(any())).willThrow(new HospitalReviewAppException(ErrorCode.DUPLICATED_USER_NAME, ""));
 
         mockMvc.perform(
@@ -77,5 +70,36 @@ class UserRestControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isConflict())
                 .andDo(print());
+    }
+    @Test
+    @DisplayName("로그인 실패: id 없음")
+    void login_fail_idx() throws Exception {
+        given(userService.login(any(), any())).willThrow(new HospitalReviewAppException(ErrorCode.USER_NOT_FOUND, ""));
+
+        mockMvc.perform(
+                        post("/api/v1/users/login")
+                                .with(csrf())
+                                .content(objectMapper.writeValueAsBytes(userJoinRequest))
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+    @Test
+    @DisplayName("로그인 실패: 잘못된 비밀번호")
+    void login_fail_password() throws Exception {
+        given(userService.login(any(), any())).willThrow(new HospitalReviewAppException(ErrorCode.INVALID_PASSWORD, ""));
+
+        mockMvc.perform(
+                        post("/api/v1/users/login")
+                                .with(csrf())
+                                .content(objectMapper.writeValueAsBytes(userJoinRequest))
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+    @Test
+    @DisplayName("로그인 성공")
+    void login(){
+
     }
 }

@@ -30,4 +30,17 @@ public class UserService {
                 .email(savedUser.getEmail())
                 .build();
     }
+
+    public String login(String userName, String password) {
+        //id가 존재하는지 확인
+        User user = userRepository.findByUserName(userName)
+                .orElseThrow(() -> new HospitalReviewAppException(ErrorCode.USER_NOT_FOUND, String.format("아이디가 없습니다.")));
+        //비밀번호가 일치하는지 확인
+        if (!encoder.matches(password, user.getPassword())) {
+            throw new HospitalReviewAppException(ErrorCode.INVALID_PASSWORD, String.format(("비밀번호가 틀렸습니다.")));
+        }
+        //토큰 생성
+
+        return "";
+    }
 }
