@@ -1,6 +1,7 @@
 package com.example.securityprac.domain;
 
 
+import com.example.securityprac.dto.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,5 +22,7 @@ public class User {
     private String userName;
     private String password;
     private String email;
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
 }

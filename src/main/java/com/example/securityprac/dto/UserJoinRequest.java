@@ -17,6 +17,7 @@ public class UserJoinRequest {
                 .userName(this.userName)
                 .password(password)
                 .email(this.email)
+                .role(UserRole.USER)    //role 추가
                 .build();
     }
 }
