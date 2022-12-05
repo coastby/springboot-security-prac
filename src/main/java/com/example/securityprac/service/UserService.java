@@ -48,4 +48,8 @@ public class UserService {
         String token = JwtTokenUtil.generateToken(user.getUserName(), secretKey, expiredTimeMs);
         return token;
     }
+    public User getUserByUserName(String userName){
+        return userRepository.findByUserName(userName).orElseThrow(() -> new HospitalReviewAppException(ErrorCode.USER_NOT_FOUND, String.format("아이디가 없습니다.")));
+    }
+
 }

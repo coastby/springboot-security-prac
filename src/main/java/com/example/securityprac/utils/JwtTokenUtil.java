@@ -31,4 +31,8 @@ public class JwtTokenUtil {
         Date expiredDate = extractClaims(token, secretKey).getExpiration(); //token의 유효기간 추출
         return expiredDate.before(new Date());      //유효기간이 지금보다 전인지 확인
     }
+    //userName을 꺼내오는 메서드
+    public static String getUserName(String token, String secretKey){
+        return extractClaims(token, secretKey).get("userName", String.class);
+    }
 }
