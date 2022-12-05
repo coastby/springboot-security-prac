@@ -2,6 +2,8 @@ server:
   servlet:
     encoding:
       force-response: true
+
+#jpa 설정
 spring:
   jpa:
     hibernate:
@@ -12,11 +14,14 @@ spring:
     url: localhost
     username: root
     password: 1q2w3e4r
+#swagger 설정
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
 
-
+#token 키 변수
 jwt:
   token:
     secret: key
+
+
