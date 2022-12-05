@@ -1,5 +1,6 @@
 package com.example.securityprac.configuration;
 
+import com.example.securityprac.domain.User;
 import com.example.securityprac.service.UserService;
 import com.example.securityprac.utils.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
@@ -41,21 +42,27 @@ public class JwtTokenFilter extends OncePerRequestFilter {      //api 요청을 
             token = authorizationHeader.split(" ")[1].trim();
         } catch (Exception e) {
             log.error("토큰을 분리하는데 실패했습니다. - {}", authorizationHeader);
-            filterChain.doFilter((request, response));
+            filterChain.doFilter(request, response);
             return;
         }
         log.info("token : {}", token);
 
         //토큰이 Valid한지 확인하기
-
+        if(JwtTokenUtil.isExpired(token, secretKey)){
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         //userName 넣기, 문 열어주기
-        //token 만들기
-        UsernamePasswordAuthenticationToken authenticationToken =  new UsernamePasswordAuthenticationToken("", null, List.of(new SimpleGrantedAuthority("U ser")));
+        String userName = JwtTokenUtil.getUserName(token, secretKey);
+        log.info("userName : {}", userName);
+        User user = userService.getUserByUserName(userName);
+
+        //AuthenticationToken 만들기
+        UsernamePasswordAuthenticationToken authenticationToken =  new UsernamePasswordAuthenticationToken(user.getUserName(), null, List.of(new SimpleGrantedAuthority(user.getRole().name())));
         //디테일 설정하기
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         filterChain.doFilter(request, response);
-
     }
 }
