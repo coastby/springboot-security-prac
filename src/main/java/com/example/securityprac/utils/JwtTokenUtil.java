@@ -24,7 +24,7 @@ public class JwtTokenUtil {
     }
     //token의 Claim을 분리하는 메서드
     public static Claims extractClaims(String token, String key){
-        return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
+        return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();    //token을 파싱할 때 키가 필요하다
     }
     //token이 만료되었는지 체크
     public static boolean isExpired(String token, String secretKey) {
