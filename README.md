@@ -9,11 +9,6 @@ Java 11
 <summary>Dependency</summary>
 <div markdown="1">
 
-
-</div>
-</details>
-
-Dependency :
 - spring-boot-starter-web
 - spring-boot-starter-test
 - spring-boot-starter-data-jpa
@@ -25,19 +20,24 @@ Dependency :
 - spring-boot-starter-security
 - spring-security-test
 
+</div>
+</details>
+
+
+
 
 ## 최종 목표
 > 회원 가입 :
-> - 아이디가 중복되면 안 된다.
-> - 비밀번호를 DB에 저장 시 암호화되어서 저장된다.
-> 
+- 아이디가 중복되면 안 된다.
+- 비밀번호를 DB에 저장 시 암호화되어서 저장된다.
+
 > 로그인 :
-> - 해당되는 아이디가 없으면 예외가 발생한다.
-> - 비밀번호가 일치하지 않으면 예외가 발생한다.
-> - 로그인이 되면 토큰이 발급된다.
-> 
+- 해당되는 아이디가 없으면 예외가 발생한다.
+- 비밀번호가 일치하지 않으면 예외가 발생한다.
+- 로그인이 되면 토큰이 발급된다.
+ 
 > 리뷰쓰기 :
-> - 로그인을 한 사람만 리뷰를 쓸 수 있다.
+- 로그인을 한 사람만 리뷰를 쓸 수 있다.
 
 
 ## Nov 28, 2022
